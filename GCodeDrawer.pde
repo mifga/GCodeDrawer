@@ -21,15 +21,15 @@ void setup() {
   cam.setMaximumDistance(500);
 
   drawing = new GCodeDrawing();
- 
 
 //  server = new RepGSocketServer(this, 2000);
 
-//  controlP5 = new ControlP5(this);
-//  Controller loadButton = controlP5.addButton("Load File",0,100,100,80,19);
-
   // Just load a file since we can't get buttons to work, etc
-  loadFile("/home/matt/MakerBot/repg_workspace/ReplicatorG/dist/linux/replicatorg-${replicatorg.version}/examples/wfu_cbi_skull.gcode");
+//  loadFile("/home/matt/MakerBot/repg_workspace/ReplicatorG/dist/linux/replicatorg-${replicatorg.version}/examples/wfu_cbi_skull.gcode");
+  loadFile("C:\\Users\\matt.mets\\Downloads\\windii.gcode");
+//  loadFile("C:\\Users\\matt.mets\\repos\\3d-Models\\keepon_headhat\\keepon_headhat.gcode");
+  
+  println("done!");
 }
 
 void loadFile(String filename) {
@@ -49,6 +49,8 @@ void loadFile(String filename) {
     }
   } catch (IOException e) {
   }
+  
+  drawing.finalize();
 }
 
 void processServerCommands() {
@@ -68,6 +70,7 @@ void draw() {
 //  processServerCommands();
 
   // Now do the drawing.
+  lights();
   background(0);
   drawing.draw();
 }
