@@ -91,15 +91,17 @@ class GCodeDrawing {
     GL gl = pgl.beginGL();  // always use the GL object returned by beginGL
     
     gl.glEnableClientState(GL.GL_VERTEX_ARRAY);
-    gl.glVertexPointer(3, GL.GL_FLOAT, 0, vBuffer);
- 
     gl.glEnableClientState(GL.GL_COLOR_ARRAY);
+    
+    gl.glVertexPointer(3, GL.GL_FLOAT, 0, vBuffer);
     gl.glColorPointer(3, GL.GL_FLOAT, 0, cBuffer);
     
     pgl.endGL();
     
     finalized = true;
   }
+  
+
   
   void draw() { 
     if (finalized) {   

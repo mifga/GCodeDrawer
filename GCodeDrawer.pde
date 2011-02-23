@@ -21,8 +21,9 @@ void setup() {
   cam.setMaximumDistance(500);
 
   controlP5 = new ControlP5(this);
-  controlP5.addButton("button",10,100,60,80,20).setId(1);
-  controlP5.addButton("buttonValue",4,100,90,80,20).setId(2);
+  controlP5.addButton("Load_File",10,100,60,80,20);
+//  controlP5.addButton("buttonValue",4,100,90,80,20);
+  
   controlP5.setAutoDraw(false);
 
   drawing = new GCodeDrawing();
@@ -30,7 +31,6 @@ void setup() {
 //  server = new RepGSocketServer(this, 2000);
 
   String fileName = selectInput();
-  
   if (fileName != null) {
     loadFile(fileName);
   }
@@ -44,10 +44,17 @@ void setup() {
 void loadFile(String filename) {
   // Replace this with your file.
   BufferedReader reader = createReader(filename);
-  String line;
   
+  if (reader == null) {
+    return;
+  }
+  
+  drawing = new GCodeDrawing();
+  
+  String line;
   try {
     while(true) {
+//    for (String line : reader) {
       line = reader.readLine();
       
       if( line == null ) {
@@ -86,19 +93,23 @@ void draw() {
 }
 
 void gui() {
-   hint(DISABLE_DEPTH_TEST);
+//   hint(DISABLE_DEPTH_TEST);
    currCameraMatrix = new PMatrix3D(g3.camera);
    camera();
    controlP5.draw();
    g3.camera = currCameraMatrix;
-   hint(ENABLE_DEPTH_TEST);
+//   hint(ENABLE_DEPTH_TEST);
 }
 
 void controlEvent(ControlEvent theEvent) {
   println(theEvent.controller().id());
 }
 
-void button(float theValue) {
-  println("a button event. "+theValue);
+public void Load_File(int theValue) {
+  println(theValue);
+  String fileName = selectInput();
+  if (fileName != null) {
+    loadFile(fileName);
+  }
 }
- 
+
