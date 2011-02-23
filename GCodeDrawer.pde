@@ -1,18 +1,18 @@
 import peasy.*;
 import processing.opengl.*;
-//import controlP5.*;
-
-// ControlP5 controlP5;
-// ControlWindow controlWindow;
+import controlP5.*;
 
 PeasyCam cam;
+ControlP5 controlP5;
+PMatrix3D currCameraMatrix;
+PGraphics3D g3;
 
 RepGSocketServer server;
 GCodeDrawing drawing;
 
-
 void setup() {
   size(800,800,OPENGL);
+  g3 = (PGraphics3D)g;
   smooth();
   frameRate(30);
   
@@ -20,16 +20,25 @@ void setup() {
   cam.setMinimumDistance(50);
   cam.setMaximumDistance(500);
 
+  controlP5 = new ControlP5(this);
+  controlP5.addButton("button",10,100,60,80,20).setId(1);
+  controlP5.addButton("buttonValue",4,100,90,80,20).setId(2);
+  controlP5.setAutoDraw(false);
+
   drawing = new GCodeDrawing();
 
 //  server = new RepGSocketServer(this, 2000);
 
+  String fileName = selectInput();
+  
+  if (fileName != null) {
+    loadFile(fileName);
+  }
+  
   // Just load a file since we can't get buttons to work, etc
 //  loadFile("/home/matt/MakerBot/repg_workspace/ReplicatorG/dist/linux/replicatorg-${replicatorg.version}/examples/wfu_cbi_skull.gcode");
-  loadFile("C:\\Users\\matt.mets\\Downloads\\windii.gcode");
+//  loadFile("C:\\Users\\matt.mets\\Downloads\\outhouse_110220m.gcode");
 //  loadFile("C:\\Users\\matt.mets\\repos\\3d-Models\\keepon_headhat\\keepon_headhat.gcode");
-  
-  println("done!");
 }
 
 void loadFile(String filename) {
@@ -70,8 +79,26 @@ void draw() {
 //  processServerCommands();
 
   // Now do the drawing.
-  lights();
   background(0);
   drawing.draw();
+
+  gui(); 
 }
 
+void gui() {
+   hint(DISABLE_DEPTH_TEST);
+   currCameraMatrix = new PMatrix3D(g3.camera);
+   camera();
+   controlP5.draw();
+   g3.camera = currCameraMatrix;
+   hint(ENABLE_DEPTH_TEST);
+}
+
+void controlEvent(ControlEvent theEvent) {
+  println(theEvent.controller().id());
+}
+
+void button(float theValue) {
+  println("a button event. "+theValue);
+}
+ 
